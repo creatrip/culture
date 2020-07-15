@@ -80,6 +80,17 @@ function dogs(): x | y | void {
   }
 }
 
+// bad
+function dogs(x): y | z | void {
+  if (x) {
+    if (z) {
+      return y;
+    }
+  } else {
+    return z;
+  }
+}
+
 // good
 function foo(): x | y {
   if (x) {
@@ -101,8 +112,18 @@ function cats(): x | y | void {
 }
 
 // good
-function dogs(x): y | z | void {
+function dogs(): y | z {
+  if (x && z) {
+    return y;
+  } else {
+    return z;
+  }
+}
+
+// good
+function dogs(): y | z {
   if (x) {
+    // ...
     if (z) {
       return y;
     }
