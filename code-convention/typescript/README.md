@@ -5,7 +5,7 @@
 1. [Blocks](#Blocks)
 
 ## Blocks
-- 1.1 Use braces with all multiline blocks. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
+- 1.1 멀티라인 블록에서는 항상 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
 
 ```typescript
 // bad
@@ -19,7 +19,10 @@ if (test) return false;
 if (test) {
   return false;
 }
+```
 
+- 1.2 함수는 항상 멀티라인으로 선언 합니다.
+```typescript
 // bad
 function foo(): boolean { return false; }
 
@@ -29,7 +32,7 @@ function bar(): boolean {
 }
 ```
 
-- 1.2 If you're using multiline blocks with `if` and `else`, put `else` on the same line as your `if` block's closing brace. eslint: [`brace-style`](https://eslint.org/docs/rules/brace-style.html)
+- 1.3 `if`블록과 `else`블록을 사용하는 멀티라인 블록에서 `else`블록은 `if`블록을 닫는 중괄호와 같은 라인에 적어야 합니다. eslint: [`brace-style`](https://eslint.org/docs/rules/brace-style.html)
 ```typescript
 // bad
 if (test) {
@@ -49,7 +52,7 @@ if (test) {
 }
 ```
 
-- 1.3 If an `if` block always executes a `return` statement, the subsequent `else` block is unnecessary. A `return` in an `else if` block following an `if` block that contains a `return` can be separated into multiple `if` blocks. eslint: [`no-else-return`](https://eslint.org/docs/rules/no-else-return)
+- 1.4 만약 `if`블록이 항상 `return`을 실행한다면, 차후에 오는 `else`블록은 불필요합니다. `return`을 포함하는 `if`블록 뒤에 오는 `else if`블록의 `return`은 여러개의 `if`블록으로 분리 될 수 있습니다. eslint: [`no-else-return`](https://eslint.org/docs/rules/no-else-return)
 ```typescript
 // bad
 function foo(): x | y {
@@ -80,6 +83,17 @@ function dogs(): x | y | void {
   }
 }
 
+// bad
+function dogs(x): y | z | void {
+  if (x) {
+    if (z) {
+      return y;
+    }
+  } else {
+    return z;
+  }
+}
+
 // good
 function foo(): x | y {
   if (x) {
@@ -101,8 +115,18 @@ function cats(): x | y | void {
 }
 
 // good
-function dogs(x): y | z | void {
+function dogs(): y | z {
+  if (x && z) {
+    return y;
+  } else {
+    return z;
+  }
+}
+
+// good
+function dogs(): y | z {
   if (x) {
+    // ...
     if (z) {
       return y;
     }
