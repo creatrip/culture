@@ -4,6 +4,7 @@
 ## Table of Contents
 1. [Blocks](#Blocks)
 2. [Testing](#Testing)
+3. [Export/Import](#Export/Import)
 
 ## Blocks
 - 1.1 멀티라인 블록에서는 항상 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
@@ -160,5 +161,77 @@ function foo() {
     - Airbnb에서는 [mocha](https://www.npmjs.com/package/mocha) 와 [jest](https://www.npmjs.com/package/jest) 의 사용을 우선시 한다. [tape](https://www.npmjs.com/package/tape) 은 작은 부위, 분리된 모듈에서 가끔 사용된다.
     - 100% 테스트 커버리지는 좋은 목표이지만, 현실적으로 도달하기 힘들다.
     - 버그를 수정할 때, [회귀 테스트](https://ko.wikipedia.org/wiki/%ED%9A%8C%EA%B7%80_%ED%85%8C%EC%8A%A4%ED%8A%B8) 를 작성하라. 회귀 테스트 없이 수정된 버그는 또 다른 버그를 낳을 가능성이 높다.
+
+3. Mocking
+    - mock data 는 tests/mocks 폴더 내부에 위치한다.<br>
+      ex) A 모델의 mock 데이터는 A/tests/mocks 하위에 존재하게 된다.
+    - mock data 는 db를 생성하기 위한 raw data 일 뿐이고, 이 mock data 를 통해 실제 db를 생성한다.
+
+```typescript
+// src/modules/blog/tests/mocks/blog.mock.ts
+import { LanguageType } from '../../../base/language-type';
+
+export const blogTitle: string = 'awwwwwesome blog title';
+export const untitledBlogTitle: string = 'Untitled blog';
+
+export const blogCreateArgs: { language: LanguageType } = {
+  language: LanguageType.ENGLISH,
+};
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Export/Import
+
+- 클래스를 export 하는 경우 파일명은 PascalCase 를 따른다
+```typescript
+// Creatrip.ts
+class Creatrip {};
+export default Creatrip;
+```
+
+- 여러 모듈을 export 하는 경우 export default 이름을 파일 이름으로 한다.
+```typescript
+// alphabet.ts
+export const a = {};
+export const b = {};
+export const c = {};
+
+const alphabet = {
+  a,
+  b,
+  c,
+};
+export default alphabet;
+```
+
+- export default 대상을 import 하는 경우라면 export 하는 대상의 이름과 import 이름을 같도록 한다.
+
+```typescript
+// bar.ts
+// bad (다른 이름으로 불러옴)
+import abc from 'alphabet';
+
+// bad (이름을 변경해서 불러옴)
+import alphabet as abc from 'alphabet';
+
+// bad (첫 글자가 lowercase로 변경함)
+import Creatrip as creatrip from 'Creatrip';
+
+// good (export 하는 이름 그대로 import 해야한다)
+import alphabet from 'alphabet';
+import Creatrip from 'Creatrip';
+
+// good (* as 를 사용하는 경우는 허용한다)
+import * as alphabet from 'alphabet';
+import * as Creatrip from 'Creatrip';
+
+// good (따로따로 import)
+import { a, b, c } from 'alphabet';
+import alphabet from 'alphabet';
+
+// good (한번에 import)
+import alphabet, { a, b, c } from 'alphabet';
+``` 
 
 **[⬆ back to top](#table-of-contents)**
