@@ -191,47 +191,55 @@ export default Creatrip;
 ```
 
 - 여러 모듈을 export 하는 경우 export default 이름을 파일 이름으로 한다.
-```typescript
-// alphabet.ts
-export const a = {};
-export const b = {};
-export const c = {};
+```tsx
+// Component.tsx
+import React from 'react';
 
-const alphabet = {
-  a,
-  b,
-  c,
-};
-export default alphabet;
+export interface ComponentProps {
+  // ...
+}
+
+function Component(): JSX.Element {
+  // ...
+
+  return (
+    < />
+  );
+}
+
+export default Component;
 ```
 
 - export default 대상을 import 하는 경우라면 export 하는 대상의 이름과 import 이름을 같도록 한다.
 
 ```typescript
 // bar.ts
+// bad (require는 사용하지 않는다)
+const component = require('Component');
+
 // bad (다른 이름으로 불러옴)
-import abc from 'alphabet';
+import component from 'Component';
 
 // bad (이름을 변경해서 불러옴)
-import alphabet as abc from 'alphabet';
+import Component as myAwesomeComponent from 'Component';
 
 // bad (첫 글자가 lowercase로 변경함)
 import Creatrip as creatrip from 'Creatrip';
 
+// bad (하나의 파일에 있는 내용들은 한번에 import 해야한다)
+import { ComponentProps } from 'Component';
+import Component from 'Component';
+
 // good (export 하는 이름 그대로 import 해야한다)
-import alphabet from 'alphabet';
+import Component from 'Component';
 import Creatrip from 'Creatrip';
 
 // good (* as 를 사용하는 경우는 허용한다)
-import * as alphabet from 'alphabet';
+import * as Component from 'Component';
 import * as Creatrip from 'Creatrip';
 
-// good (따로따로 import)
-import { a, b, c } from 'alphabet';
-import alphabet from 'alphabet';
-
 // good (한번에 import)
-import alphabet, { a, b, c } from 'alphabet';
+import Component, { ComponentProps } from 'Component';
 ``` 
 
 **[⬆ back to top](#table-of-contents)**
