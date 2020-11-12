@@ -214,29 +214,26 @@ export default Component;
 
 ```typescript
 // bar.ts
-// bad (require는 사용하지 않는다)
+// bad (typescript에서 require는 사용하지 않는다)
 const component = require('Component');
 
-// bad (다른 이름으로 불러옴)
-import component from 'Component';
-
-// bad (이름을 변경해서 불러옴)
-import Component as myAwesomeComponent from 'Component';
-
-// bad (첫 글자가 lowercase로 변경함)
-import Creatrip as creatrip from 'Creatrip';
+// bad (유추가 불가능한 전혀 다른 이름으로 불러옴)
+import foo from 'bar';
 
 // bad (하나의 파일에 있는 내용들은 한번에 import 해야한다)
 import { ComponentProps } from 'Component';
 import Component from 'Component';
 
+// bad (import한 대상이 어떤 동작을 하는지 
+
 // good (export 하는 이름 그대로 import 해야한다)
-import Component from 'Component';
 import Creatrip from 'Creatrip';
 
 // good (* as 를 사용하는 경우는 허용한다)
-import * as Component from 'Component';
 import * as Creatrip from 'Creatrip';
+
+// good (import한 대상의 기능을 명확하게 나타내지 못하는 대상에 대해서는 as를 사용한다)
+import { v4 as uuidv4 } from 'uuid';
 
 // good (한번에 import)
 import Component, { ComponentProps } from 'Component';
