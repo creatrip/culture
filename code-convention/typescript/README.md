@@ -4,6 +4,7 @@
 ## Table of Contents
 1. [Blocks](#Blocks)
 2. [Testing](#Testing)
+3. [Export/Import](#Export/Import)
 
 ## Blocks
 - 1.1 멀티라인 블록에서는 항상 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
@@ -160,5 +161,116 @@ function foo() {
     - Airbnb에서는 [mocha](https://www.npmjs.com/package/mocha) 와 [jest](https://www.npmjs.com/package/jest) 의 사용을 우선시 한다. [tape](https://www.npmjs.com/package/tape) 은 작은 부위, 분리된 모듈에서 가끔 사용된다.
     - 100% 테스트 커버리지는 좋은 목표이지만, 현실적으로 도달하기 힘들다.
     - 버그를 수정할 때, [회귀 테스트](https://ko.wikipedia.org/wiki/%ED%9A%8C%EA%B7%80_%ED%85%8C%EC%8A%A4%ED%8A%B8) 를 작성하라. 회귀 테스트 없이 수정된 버그는 또 다른 버그를 낳을 가능성이 높다.
+
+3. Mocking
+    - 테스트 코드는 `**/*tests*/**/*.spec.ts` 경로를 만족한다.
+    - mock에 관련된 코드는 `**/*tests*/**/mocks/*.mock.ts` 경로를 만족한다.<br>
+      ex) A 모델의 mock 모듈(또는 데이터)은 A/tests/mocks 하위에 존재하게 된다.
+    - 테스트에 필요한 mock 데이터는 mock 모듈 또는 mock 데이터를 통해 생성된 것이어야 한다.
+
+```typescript
+// user/models/user.ts
+class User {
+  constructor(
+    private readonly name: string, 
+    private readonly birth: Date,
+  ) {}
+
+  age(): number {
+    return (new Date().getFullYear() - this.birth.getFullYear()) + 1
+  }  
+}
+```
+
+```typescript
+// user/tests/mocks/user.mock.ts
+const birth: Date = new Date(1992, 3, 8);
+export const user: User = new User('아무개', birth);
+``` 
+
+```typescript
+// user/tests/user.spec.ts
+// 유저 자체를 테스트하는 경우에는 테스트코드에서 직접 생성
+describe('User', () => {
+  it('[Success] should success', () => {
+    const user: User = new User('아무개', new Date(1992, 3, 8));
+    expect(user.age()).toBe(29);
+  })
+})
+```
+
+```typescript
+// group/tests/group.spec.ts
+// 다른 모듈의 테스트에 user가 사용되는 경우에는 mock을 통해 user를 생성
+import { user } from './mocks/user.mock';
+
+describe('Group', () => {
+  it('[Success] if add one user to group then group should has only one user', () => {
+    const group: Group = new Group()
+    group.add(user);
+    expect(group.users.length).toBe(1);
+  })
+})
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Export/Import
+
+- 클래스를 export 하는 경우 파일명은 PascalCase 를 따른다
+```typescript
+// Creatrip.ts
+class Creatrip {};
+export default Creatrip;
+```
+
+- 여러 모듈을 export 하는 경우 export default 이름을 파일 이름으로 한다.
+```tsx
+// Component.tsx
+import React from 'react';
+
+export interface ComponentProps {
+  // ...
+}
+
+function Component(): JSX.Element {
+  // ...
+
+  return (
+    < />
+  );
+}
+
+export default Component;
+```
+
+- export default 대상을 import 하는 경우라면 export 하는 대상의 이름과 import 이름을 같도록 한다.
+
+```typescript
+// bar.ts
+// bad (typescript에서 require는 사용하지 않는다)
+const component = require('Component');
+
+// bad (유추가 불가능한 전혀 다른 이름으로 불러옴)
+import foo from 'bar';
+
+// bad (하나의 파일에 있는 내용들은 한번에 import 해야한다)
+import { ComponentProps } from 'Component';
+import Component from 'Component';
+
+// bad (import한 대상이 어떤 동작을 하는지 
+
+// good (export 하는 이름 그대로 import 해야한다)
+import Creatrip from 'Creatrip';
+
+// good (* as 를 사용하는 경우는 허용한다)
+import * as Creatrip from 'Creatrip';
+
+// good (import한 대상의 기능을 명확하게 나타내지 못하는 대상에 대해서는 as를 사용한다)
+import { v4 as uuidv4 } from 'uuid';
+
+// good (한번에 import)
+import Component, { ComponentProps } from 'Component';
+``` 
 
 **[⬆ back to top](#table-of-contents)**
