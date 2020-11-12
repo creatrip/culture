@@ -163,20 +163,54 @@ function foo() {
     - 버그를 수정할 때, [회귀 테스트](https://ko.wikipedia.org/wiki/%ED%9A%8C%EA%B7%80_%ED%85%8C%EC%8A%A4%ED%8A%B8) 를 작성하라. 회귀 테스트 없이 수정된 버그는 또 다른 버그를 낳을 가능성이 높다.
 
 3. Mocking
-    - mock data 는 tests/mocks 폴더 내부에 위치한다.<br>
-      ex) A 모델의 mock 데이터는 A/tests/mocks 하위에 존재하게 된다.
-    - mock data 는 db를 생성하기 위한 raw data 일 뿐이고, 이 mock data 를 통해 실제 db를 생성한다.
+    - 테스트 코드는 `**/*tests*/**/*.spec.ts` 경로를 만족한다.
+    - mock에 관련된 코드는 `**/*tests*/**/mocks/*.mock.ts` 경로를 만족한다.<br>
+      ex) A 모델의 mock 모듈(또는 데이터)은 A/tests/mocks 하위에 존재하게 된다.
+    - 테스트에 필요한 mock 데이터는 mock 모듈 또는 mock 데이터를 통해 생성된 것이어야 한다.
 
 ```typescript
-// src/modules/blog/tests/mocks/blog.mock.ts
-import { LanguageType } from '../../../base/language-type';
+// user/models/user.ts
+class User {
+  constructor(
+    private readonly name: string, 
+    private readonly birth: Date,
+  ) {}
 
-export const blogTitle: string = 'awwwwwesome blog title';
-export const untitledBlogTitle: string = 'Untitled blog';
+  age(): number {
+    return (new Date().getFullYear() - this.birth.getFullYear()) + 1
+  }  
+}
+```
 
-export const blogCreateArgs: { language: LanguageType } = {
-  language: LanguageType.ENGLISH,
-};
+```typescript
+// user/tests/mocks/user.mock.ts
+const birth: Date = new Date(1992, 3, 8);
+export const user: User = new User('아무개', birth);
+``` 
+
+```typescript
+// user/tests/user.spec.ts
+// 유저 자체를 테스트하는 경우에는 테스트코드에서 직접 생성
+describe('User', () => {
+  it('[Success] should success', () => {
+    const user: User = new User('아무개', new Date(1992, 3, 8));
+    expect(user.age()).toBe(29);
+  })
+})
+```
+
+```typescript
+// group/tests/group.spec.ts
+// 다른 모듈의 테스트에 user가 사용되는 경우에는 mock을 통해 user를 생성
+import { user } from './mocks/user.mock';
+
+describe('Group', () => {
+  it('[Success] if add one user to group then group should has only one user', () => {
+    const group: Group = new Group()
+    group.add(user);
+    expect(group.users.length).toBe(1);
+  })
+})
 ```
 
 **[⬆ back to top](#table-of-contents)**
