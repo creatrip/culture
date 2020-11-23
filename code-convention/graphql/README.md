@@ -32,10 +32,12 @@
 ```
 EX)도메인을 Merchandise라고 가정했을때
 CreateMerchandiseArgs{
-    a
-    b
-    c
-    d
+ data: CreateMerchandiseInput
+}
+
+CreateMerchandiseInput {
+   name: string
+   language: LagnuageType
 }
 ```
 
