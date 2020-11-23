@@ -2,8 +2,8 @@
 가독성 있는 graphql 구조를 작성할 수 있는 가장 합리적인 convention을 목표로 합니다.
 
 ## Table of Contents
-1. [GraphQL Relation 명명규칙](#Relation)
-2. [GraphQL DTO 명명규칙](#DTO)
+1. [Relation Mutation 정의](#Relation-Mutation-정의)
+2. [DTO 정의](#DTO-정의)
 
 
 ## Relation Mutation 정의
@@ -24,6 +24,8 @@
 추가 -> createA
 삭제 -> deleteA
 ```
+
+**[⬆ back to top](#table-of-contents)**
 
 ## DTO 정의
 - 2.1 도메인에 대한 DTO를 만든다고 가정했을때 아래와 같은 규칙을 따른다.
