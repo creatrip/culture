@@ -26,32 +26,3 @@
 ```
 
 **[⬆ back to top](#table-of-contents)**
-
-## DTO 정의
-- 2.1 도메인에 대한 DTO를 만든다고 가정했을때 아래와 같은 규칙을 따른다.
-```
-EX)도메인을 Merchandise라고 가정했을때
-CreateMerchandiseArgs{
- data: CreateMerchandiseInput
-}
-
-CreateMerchandiseInput {
-   name: string
-   language: LagnuageType
-}
-```
-
-- 2.2 여러개를 생성하는 DTO는 아래의 규칙을 따른다.
-```
-EX)도메인을 Tag라고 가정했을때
-BulkCreateTagArgs {
-    translation:CreateTagTranslationInput[]
-}
-
-CreateTagTranslationInput {
-    name:string
-    language:LanguageType
-}
-``` 
-
-**[⬆ back to top](#table-of-contents)**
