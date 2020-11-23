@@ -3,8 +3,6 @@
 
 ## Table of Contents
 1. [Relation Mutation 정의](#Relation-Mutation-정의)
-2. [DTO 정의](#DTO-정의)
-
 
 ## Relation Mutation 정의
 - 1.1 M:N 관계에서의 추가, 삭제 뮤테이션
