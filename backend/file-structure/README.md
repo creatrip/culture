@@ -2,12 +2,12 @@
 
 ### 기본 원칙
 
-1.1 파일명은 domain 단위로 . 을 붙입니다.
+1.1 파일명은 기능 단위로 . 을 붙입니다.
 ```
 member.service.ts
 member.module.ts
 
-member.service.mock.ts
+member.mock.service.ts
 ```
 
 1.2 테스트 파일은 {domain}.{test-file}.spec.ts로 명명합니다.
