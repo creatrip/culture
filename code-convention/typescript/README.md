@@ -7,7 +7,7 @@
 3. [Export/Import](#Export/Import)
 
 ## Blocks
-- 1.1 멀티라인 블록에서는 항상 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
+- 1.1 nonblock-statement-body에서는 statement를 같은 줄에 사용합니다. 다른 줄에 사용하려면 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
 
 ```typescript
 // bad
