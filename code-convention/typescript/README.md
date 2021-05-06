@@ -7,7 +7,7 @@
 3. [Export/Import](#Export/Import)
 
 ## Blocks
-- 1.1 멀티라인 블록에서는 항상 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
+- 1.1 if, else, while, do-while, and for statements 와 함께 block 없이 쓰이는 single-line statements는 같은 줄에 사용합니다. single-line statements 다른 줄에 사용하려면 중괄호를 사용합니다. eslint: [`nonblock-statement-body-position`](https://eslint.org/docs/rules/nonblock-statement-body-position)
 
 ```typescript
 // bad
